@@ -3,8 +3,6 @@ namespace App\Http\Controllers;
 
 use App\Interfaces\UserRepositoryInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller {
 
@@ -17,49 +15,44 @@ class UserController extends Controller {
 
     public function index()
     {
-        # users not found (404)
-        # users found (200)
         $users = $this->userRepository->all();
-        if ($users == null)
-            return response(['message' => 'No users found'], 404);
 
-        return response($users, 200);
+        return count($users) >= 1 ? response($users, 200) :
+            response(['messages' => "No users in blog"], 404);
     }
 
     public function show($userId)
     {
-        # non_positive_integer_input (422)
-        # user_not_found (404)
-        # user_found (200)
-        try {
-            Validator::make(['user_id' => $userId], ['user_id' => 'integer|min:1'])->validate();
-        } catch (ValidationException $e) {
-            return response(['message' => $e->getMessage()], 422);
-        }
-
         $user = $this->userRepository->find($userId);
 
-        if ($user == null)
-            return response(['message' => 'User not found'], 404);
-
-        return response($user, 200);
+        return $user ? response($user, 200) : response(['message' => 'User not found'], 404);
     }
 
 
     public function update(Request $request, $userId)
     {
-        $validatedRequest = $this->validate($request,[
-            'full_name' => 'required|string',
-            'email' => 'required|email'
-        ]);
+        $this->validator($request);
 
-        $this->userRepository->updateUser($validatedRequest, $userId);
-
+        return $this->userRepository->updateUser($request->toArray(), $userId) ?
+            response(['message' => 'User updated successfully'], 201):
+            response(['message' => 'User not found'], 404);
     }
 
     public function destroy($userId)
     {
-        $user = $this->userRepository->find($userId);
+        return $this->userRepository->deleteUser($userId) ?
+            response(['message' => 'User deleted successfully'], 201):
+            response(['message' => 'User not found'], 404);
     }
+
+    public function validator(Request $request)
+    {
+        return $this->validate($request, [
+            'full_name' => 'string|required',
+            'email'     => 'email|required',
+            'password'  => 'string|required',
+        ]);
+    }
+
 
 }
