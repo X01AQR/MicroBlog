@@ -13,6 +13,15 @@ class UserRepository implements UserRepositoryInterface {
 
     public function find($userId)
     {
-
+        return User::find($userId);
     }
+
+    public function updateUser($validatedRequest, $userId)
+    {
+        $user = $this->find($userId);
+
+        $user->update($validatedRequest);
+    }
+
+
 }
