@@ -5,6 +5,7 @@ use App\Interfaces\UserRepositoryInterface;
 use App\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\DB;
 
 class UserRepository implements UserRepositoryInterface {
 

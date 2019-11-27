@@ -83,6 +83,7 @@ $app->singleton(
 $app->register(App\Providers\UserRepositoryServiceProvider::class);
 $app->register(App\Providers\ArticleRepositoryServiceProvider::class);
 $app->register(App\Providers\CategoryRepositoryServiceProvider::class);
+$app->register(App\Providers\ArticleCategoryServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

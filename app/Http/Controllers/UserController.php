@@ -52,6 +52,7 @@ class UserController extends Controller {
             'email'     => 'email|required',
             'password'  => 'string|required',
         ]);
+
     }
 
 

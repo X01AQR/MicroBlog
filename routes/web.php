@@ -30,8 +30,19 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         # GET /api/articles/{article}
         $router->get('/{article}', ['uses' => 'ArticleController@show']);
 
-        # GET /api/articles/{article}/categories
-        $router->get('/{article}/categories', ['uses' => 'CategoryController@getArticleCategories']);
+        # ArticleCategory
+
+            # GET /api/articles/{article}/categories
+            $router->get('/{article}/categories', ['uses' => 'ArticleCategoryController@index']);
+
+            # GET /api/articles/{article}/categories/{category}
+            $router->get('/{article}/categories/{category}', ['uses' => 'ArticleCategoryController@show']);
+
+            # POST /api/articles/{article}/categories/{category}/store
+            $router->post('/{article}/categories/{category}/store', ['uses' => 'ArticleCategoryController@store']);
+
+            # DELETE /api/articles/{article}/categories/{category}/delete
+            $router->delete('/{article}/categories/{category}/delete', ['uses' => 'ArticleCategoryController@destroy']);
 
         # POST /api/articles/store
         $router->post('/store', ['uses' => 'ArticleController@store']);
