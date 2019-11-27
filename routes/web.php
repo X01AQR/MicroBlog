@@ -24,6 +24,22 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->group(['prefix' => 'articles'], function () use ($router) {
 
+        # GET /api/articles
+        $router->get('/', ['uses' => 'ArticleController@index']);
+
+        # GET /api/articles/{article}
+        $router->get('/{article}', ['uses' => 'ArticleController@show']);
+
+        # POST /api/articles/store
+        $router->post('/store', ['uses' => 'ArticleController@store']);
+
+        # PATCH /api/articles/{article}/update
+        $router->patch('/{article}/update', ['uses' => 'ArticleController@update']);
+
+        # DELETE /api/articles/{article}/delete
+        $router->delete('/{article}/delete', ['uses' => 'ArticleController@destroy']);
+
+
     });
 
     $router->group(['prefix' => 'categories'], function () use ($router) {

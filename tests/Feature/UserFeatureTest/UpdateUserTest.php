@@ -100,5 +100,4 @@ class UpdateUserTest extends \TestCase
         $this->patch('/api/users/' . $user->id . '/update', $attributes)->assertResponseStatus(201);
     }
 
-
 }
