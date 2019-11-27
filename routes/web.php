@@ -2,6 +2,17 @@
 
 $router->group(['prefix' => 'api'], function () use ($router) {
 
+    $router->group(['prefix' => 'auth'], function () use ($router) {
+
+        # POST /api/auth/register
+        $router->post('/register', [ 'uses' => 'Auth\RegisterController@register']);
+
+        # POST /api/auth/login
+        $router->post('/login', [ 'uses' => 'Auth\LoginController@login']);
+
+        # POST /api/auth/logout
+        $router->post('/logout', [ 'uses' => 'Auth\LoginController@logout', 'middleware' => 'auth']);
+    });
 
     $router->group(['prefix' => 'users'], function () use ($router) {
 
