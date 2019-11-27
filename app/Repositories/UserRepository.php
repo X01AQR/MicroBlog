@@ -46,7 +46,9 @@ class UserRepository implements UserRepositoryInterface {
         $user = $this->find($userId);
 
         if($user)
-            return $user->update($validatedRequest);
+            return $user->update([
+            'full_name' => $validatedRequest['full_name'],
+            ]);
          else
             return null;
     }
@@ -73,6 +75,6 @@ class UserRepository implements UserRepositoryInterface {
         {
             $user = $this->find($userId);
 
-            return $user->update(['api_token' => null]);;
+            return $user->update(['api_token' => null]);
         }
 }

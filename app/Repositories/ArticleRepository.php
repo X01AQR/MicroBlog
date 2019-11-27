@@ -29,9 +29,13 @@ class ArticleRepository implements ArticleRepositoryInterface {
         return $articles;
     }
 
-    public function storeArticle($validatedRequest)
+    public function storeArticle($validatedRequest, $userId)
     {
-        $article = Article::create($validatedRequest);
+        $article = Article::create([
+            'user_id' => $userId,
+            'title' => $validatedRequest['title'],
+            'body' => $validatedRequest['body']
+        ]);
 
         return $article;
     }
@@ -40,7 +44,10 @@ class ArticleRepository implements ArticleRepositoryInterface {
     {
         $article = $this->find($articleId);
 
-        return $article ? $article->update($validatedRequest) : null;
+        return $article ? $article->update([
+            'title' => $validatedRequest['title'],
+            'body' => $validatedRequest['body']
+        ]) : null;
     }
 
     public function deleteArticle($articleId)

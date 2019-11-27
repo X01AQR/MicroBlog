@@ -2,6 +2,13 @@
 
 namespace App\Providers;
 
+use App\Article;
+use App\ArticleCategory;
+use App\Category;
+use App\Polices\ArticleCategoryPolicy;
+use App\Polices\ArticlePolicy;
+use App\Polices\CategoryPolicy;
+use App\Polices\UserPolicy;
 use App\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -31,9 +38,15 @@ class AuthServiceProvider extends ServiceProvider
         // the User instance via an API token or any other method necessary.
 
         $this->app['auth']->viaRequest('api', function ($request) {
+
             if ($request->input('api_token')) {
-                return User::where('api_token', $request->input('api_token'))->first();
+                return User::where('api_token', '=', $request->input('api_token'))->first();
             }
         });
+
+        Gate::policy(User::class, UserPolicy::class);
+        Gate::policy(Article::class, ArticlePolicy::class);
+        Gate::policy(Category::class, CategoryPolicy::class);
+        Gate::policy(ArticleCategory::class, ArticleCategoryPolicy::class);
     }
 }

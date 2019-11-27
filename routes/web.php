@@ -26,10 +26,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('{user}/articles', ['uses' => 'ArticleController@userArticles']);
 
         # PATCH /api/users/{user}/update
-        $router->patch('{user}/update', ['uses' => 'UserController@update']);
+        $router->patch('{user}/update', ['uses' => 'UserController@update', 'middleware' => 'auth']);
 
         # DELETE /api/users/{user}/delete
-        $router->delete('{user}/delete', ['uses' => 'UserController@destroy']);
+        $router->delete('{user}/delete', ['uses' => 'UserController@destroy', 'middleware' => 'auth']);
 
     });
 
@@ -50,19 +50,19 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/{article}/categories/{category}', ['uses' => 'ArticleCategoryController@show']);
 
             # POST /api/articles/{article}/categories/{category}/store
-            $router->post('/{article}/categories/{category}/store', ['uses' => 'ArticleCategoryController@store']);
+            $router->post('/{article}/categories/{category}/store', ['uses' => 'ArticleCategoryController@store', 'middleware' => 'auth']);
 
             # DELETE /api/articles/{article}/categories/{category}/delete
-            $router->delete('/{article}/categories/{category}/delete', ['uses' => 'ArticleCategoryController@destroy']);
+            $router->delete('/{article}/categories/{category}/delete', ['uses' => 'ArticleCategoryController@destroy', 'middleware' => 'auth']);
 
         # POST /api/articles/store
-        $router->post('/store', ['uses' => 'ArticleController@store']);
+        $router->post('/store', ['uses' => 'ArticleController@store' , 'middleware' => 'auth']);
 
         # PATCH /api/articles/{article}/update
-        $router->patch('/{article}/update', ['uses' => 'ArticleController@update']);
+        $router->patch('/{article}/update', ['uses' => 'ArticleController@update', 'middleware' => 'auth']);
 
         # DELETE /api/articles/{article}/delete
-        $router->delete('/{article}/delete', ['uses' => 'ArticleController@destroy']);
+        $router->delete('/{article}/delete', ['uses' => 'ArticleController@destroy', 'middleware' => 'auth']);
 
 
     });
@@ -77,14 +77,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         # GET /api/categories/{category}/sub-categories
         $router->get('/{category}/sub-categories', ['uses' => 'CategoryController@subCategories']);
 
-        # POST /api/categories/store
-        $router->post('/store', ['uses' => 'CategoryController@store']);
-
-        # PATCH /api/categories/{category}/update
-        $router->patch('/{category}/update', ['uses' => 'CategoryController@update']);
-
-        # DELETE /api/categories/{category}/delete
-        $router->delete('/{category}/delete', ['uses' => 'CategoryController@destroy']);
     });
 
 
