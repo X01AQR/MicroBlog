@@ -20,11 +20,7 @@ class GetUserArticlesTest extends \TestCase
 
     public function testGetArticlesForNotExistUser()
     {
-        $user = factory(User::class)->create();
-        $userId = $user->id;
-        $user->delete();
-
-        $this->get('/api/users/' . $userId .'/articles')->assertResponseStatus(404);
+        $this->get('/api/users/5/articles')->assertResponseStatus(404);
     }
 
     public function testUserHasNotArticles()

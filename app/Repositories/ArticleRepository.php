@@ -31,9 +31,9 @@ class ArticleRepository implements ArticleRepositoryInterface {
 
     public function storeArticle($validatedRequest)
     {
-        $articles = Article::create($validatedRequest);
+        $article = Article::create($validatedRequest);
 
-        return $articles;
+        return $article;
     }
 
     public function updateArticle($validatedRequest, $articleId)

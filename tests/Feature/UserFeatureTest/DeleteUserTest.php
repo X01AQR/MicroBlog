@@ -21,11 +21,7 @@ class DeleteUserTest extends \TestCase
 
     public function testIfUserNotFound()
     {
-        $user = factory(User::class)->create();
-        $userId = $user->id;
-        $user->delete();
-
-        $this->delete('/api/users/' . $userId . '/delete')->assertResponseStatus(404);
+        $this->delete('/api/users/5/delete')->assertResponseStatus(404);
     }
 
     public function testSuccessfulDeleting()

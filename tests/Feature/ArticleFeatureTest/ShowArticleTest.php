@@ -18,30 +18,14 @@ class ShowArticleTest extends \TestCase
         $this->runDatabaseMigrations();
     }
 
-    public function testStringInput()
+    public function testInvalidArticleId()
     {
         $this->get('/api/articles/string')->assertResponseStatus(404);
     }
 
-    public function testNonIntegerInput()
-    {
-        $this->get('/api/articles/23.4')->assertResponseStatus(404);
-    }
-
-    public function testNegativeIntegerInput()
-    {
-        $this->get('/api/articles/-4')->assertResponseStatus(404);
-    }
-
     public function testArticleNotFound()
     {
-        $user = factory(User::class)->create();
-        $article = factory(Article::class)->create();
-        $articleId = $article->id;
-
-        $article->delete();
-
-        $this->get('/api/articles/' . $articleId)->assertResponseStatus(404);
+        $this->get('/api/articles/5')->assertResponseStatus(404);
     }
 
     public function testArticleFound()

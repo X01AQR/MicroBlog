@@ -20,17 +20,7 @@ class DeleteArticleTest extends \TestCase
 
     public function testIfArticleNotFound()
     {
-        $user = factory(User::class)->create();
-        $article = Article::create([
-           'user_id' => $user->id,
-           'title' => 'Article title',
-           'body' => 'Article Body'
-        ]);
-
-        $articleId = $article->id;
-        $article->delete();
-
-        $this->delete('/api/articles/' . $articleId . '/delete')->assertResponseStatus(404);
+        $this->delete('/api/articles/5/delete')->assertResponseStatus(404);
     }
 
     public function testSuccessfulDeleting()

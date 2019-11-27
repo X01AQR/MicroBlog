@@ -16,6 +16,12 @@ class GetAllUsersTest extends \TestCase
         $this->runDatabaseMigrations();
     }
 
+    public function testUsersNotNotFound()
+    {
+        $this->artisan('migrate:fresh');
+        $this->get('/api/users')->assertResponseStatus(404);
+    }
+
 
     public function testUsersFound()
     {

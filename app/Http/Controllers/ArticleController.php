@@ -51,7 +51,7 @@ class ArticleController extends Controller {
 
         return $this->articlesRepository->updateArticle($validatedRequest, $articleId) ?
             response(['message' => 'Article updated successfully'], 201):
-            response(['message' => 'Article not found'], 404);;
+            response(['message' => 'Article not found'], 404);
     }
 
     public function destroy($articleId)

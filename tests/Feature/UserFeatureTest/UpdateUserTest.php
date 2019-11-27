@@ -17,7 +17,7 @@ class UpdateUserTest extends \TestCase
         $this->runDatabaseMigrations();
     }
 
-    public function testIfFullNameInputNumber()
+    public function testInvalidFullName()
     {
         $user = factory(User::class)->create();
 
@@ -74,17 +74,13 @@ class UpdateUserTest extends \TestCase
 
     public function testIfUserNotFound()
     {
-        $user = factory(User::class)->create();
-        $userId = $user->id;
-        $user->delete();
-
         $attributes = [
             'full_name' => 'Some text',
             'email'     => 'test@gmail.com',
             'password'  => 'new password'
         ];
 
-        $this->patch('/api/users/' . $userId .'/update', $attributes)->assertResponseStatus(404);
+        $this->patch('/api/users/5/update', $attributes)->assertResponseStatus(404);
     }
 
     public function testUpdateExistUserWithValidAttributes()
