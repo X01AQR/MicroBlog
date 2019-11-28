@@ -23,10 +23,9 @@ class UpdateUserTest extends \TestCase
 
         $attributes = [
             'full_name' => 123,
-            'email'     => 'test@gmail.com',
         ];
 
-        $this->patch('/api/users/' . $user->id . ' /update', $attributes)->assertResponseStatus(422);
+        $this->actingAs($user)->patch('/api/users/' . $user->id . ' /update', $attributes)->assertResponseStatus(422);
     }
 
     public function testIfFullNameInputEmpty()
@@ -35,52 +34,19 @@ class UpdateUserTest extends \TestCase
 
         $attributes = [
             'full_name' => null,
-            'email'     => 'test@gmail.com',
         ];
 
-        $this->patch('/api/users/' . $user->id . '/update', $attributes)->assertResponseStatus(422);
+        $this->actingAs($user)->patch('/api/users/' . $user->id . '/update', $attributes)->assertResponseStatus(422);
     }
 
-    public function testIfEmailInputEmpty()
-    {
-        $user = factory(User::class)->create();
 
-        $attributes = [
-            'full_name' => 'Test name',
-            'email'     => null,
-        ];
-
-        $this->patch('/api/users/' . $user->id . '/update', $attributes)->assertResponseStatus(422);
-    }
-
-    public function testIfEmailInputNotEmailAddress()
-    {
-        $user = factory(User::class)->create();
-
-        $attributes = [
-            'full_name' => 'Test name',
-            'email'     => 'Some text',
-        ];
-
-        $this->patch('/api/users/' . $user->id . '/update', $attributes)->assertResponseStatus(422);
-    }
-
-    public function testIfRequestNull()
-    {
-        $user = factory(User::class)->create();
-
-        $this->patch('/api/users/' . $user->id . '/update', [])->assertResponseStatus(422);
-    }
-
-    public function testIfUserNotFound()
+    public function testUpdateAnotherUsername()
     {
         $attributes = [
             'full_name' => 'Some text',
-            'email'     => 'test@gmail.com',
-            'password'  => 'new password'
         ];
 
-        $this->patch('/api/users/5/update', $attributes)->assertResponseStatus(404);
+        $this->patch('/api/users/5/update', $attributes)->assertResponseStatus(401);
     }
 
     public function testUpdateExistUserWithValidAttributes()
@@ -89,11 +55,9 @@ class UpdateUserTest extends \TestCase
 
         $attributes = [
             'full_name' => 'Test Name',
-            'email'     => 'test@gmail.com',
-            'password'  => 'new password'
         ];
 
-        $this->patch('/api/users/' . $user->id . '/update', $attributes)->assertResponseStatus(201);
+        $this->actingAs($user)->patch('/api/users/' . $user->id . '/update', $attributes)->assertResponseStatus(201);
     }
 
 }

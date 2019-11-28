@@ -19,16 +19,18 @@ class DeleteUserTest extends \TestCase
         $this->runDatabaseMigrations();
     }
 
-    public function testIfUserNotFound()
+    public function testDeleteAnotherUser()
     {
-        $this->delete('/api/users/5/delete')->assertResponseStatus(404);
+        $user = factory(User::class)->create();
+
+        $this->delete('/api/users/' . $user->id . '/delete')->assertResponseStatus(401);
     }
 
     public function testSuccessfulDeleting()
     {
         $user = factory(User::class)->create();
 
-        $this->json('delete', '/api/users/' . $user->id . '/delete')->assertResponseStatus(201);
+        $this->actingAs($user)->json('delete', '/api/users/' . $user->id . '/delete')->assertResponseStatus(201);
     }
 
 }

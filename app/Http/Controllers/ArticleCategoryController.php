@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers;
 use App\Interfaces\ArticleCategoryRepositoryInterface;
+use App\Repositories\CategoryRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -34,9 +35,16 @@ class ArticleCategoryController extends Controller
 
     public function store($articleId, $categoryId)
     {
+
         $articleRepository = new ArticleRepository();
+        $categoryRepository = new CategoryRepository();
 
         $article = $articleRepository->find($articleId);
+
+        $category = $categoryRepository->find($articleId);
+
+        if (!$category || !$article)
+            return response(['message' => 'Article or Category not found'], 404);
 
         if(Auth::user()->id !== $article->user_id)
             return response(['message' => 'Unauthorized'], 401);
@@ -44,7 +52,7 @@ class ArticleCategoryController extends Controller
         $articleCategory = $this->articleCategoryRepository->storeArticleCategory($articleId, $categoryId);
 
         return $articleCategory ? response(['message' => 'Article Category added successfully'], 201) :
-            response(['message' => 'Article or Category not found'], 404);
+            response(['message' => 'Bad request'], 400);
     }
 
     public function destroy($articleId, $categoryId)

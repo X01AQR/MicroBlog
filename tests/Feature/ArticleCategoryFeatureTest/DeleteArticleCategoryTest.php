@@ -22,8 +22,23 @@ class DeleteArticleCategoryTest extends \TestCase
 
     public function testArticleCategoryNotFound()
     {
-        $this->delete('/api/articles/2/categories/2/delete')->assertResponseStatus(404);
+        $user = User::create([
+            'full_name' => 'test',
+            'email' => 'test@email.com',
+            'password' => app('hash')->make('password')
+        ]);
+
+
+        $article = Article::create([
+           'user_id' => $user->id,
+           'title' => 'title',
+           'body' => 'body'
+        ]);
+
+        $this->actingAs($user)->delete('/api/articles/' . $article->id . '/categories/2/delete')->assertResponseStatus(404);
     }
+
+
 
     public function testArticleCategoryFound()
     {
@@ -33,6 +48,8 @@ class DeleteArticleCategoryTest extends \TestCase
            'title' => 'Article Title',
            'body' => 'Article Body'
         ]);
+
+
         $category = Category::create([
            'parent_id' => null,
            'name' => 'Category name'
@@ -43,7 +60,7 @@ class DeleteArticleCategoryTest extends \TestCase
             'category_id' => $category->id
         ]);
 
-        $this->delete('/api/articles/' . $article->id . '/categories/' . $category->id . '/delete')
+        $this->actingAs($user)->delete('/api/articles/' . $article->id . '/categories/' . $category->id . '/delete')
             ->assertResponseStatus(201);
     }
 

@@ -18,31 +18,25 @@ class StoreArticleTest extends \TestCase
         $this->runDatabaseMigrations();
     }
 
-    public function testAddArticleToNotExistUser()
+    public function testAddArticleWithoutAuth()
     {
-        $user = factory(User::class)->create();
-        $userId = $user->id;
-        $user->delete();
         $attributes = [
-            'user_id' => $userId,
             'title' => 'Article Title',
             'body'  => 'Article Body Article Body Article Body '
         ];
 
-        $this->post('/api/articles/store', $attributes)->assertResponseStatus(422);
+        $this->post('/api/articles/store', $attributes)->assertResponseStatus(401);
 
     }
 
     public function testRequestWithoutTitle()
     {
         $user = factory(User::class)->create();
-        $userId = $user->id;
         $attributes = [
-            'user_id' => $userId,
             'body'  => 'Article Body Article Body Article Body '
         ];
 
-        $this->post('/api/articles/store', $attributes)->assertResponseStatus(422);
+        $this->actingAs($user)->post('/api/articles/store', $attributes)->assertResponseStatus(422);
     }
 
     public function testRequestWithoutBody()
@@ -50,24 +44,21 @@ class StoreArticleTest extends \TestCase
         $user = factory(User::class)->create();
         $userId = $user->id;
         $attributes = [
-            'user_id' => $userId,
             'title' => 'Article Title',
         ];
 
-        $this->post('/api/articles/store', $attributes)->assertResponseStatus(422);
+        $this->actingAs($user)->post('/api/articles/store', $attributes)->assertResponseStatus(422);
     }
 
     public function testSuccessfullyAddArticle()
     {
         $user = factory(User::class)->create();
-        $userId = $user->id;
         $attributes = [
-            'user_id' => $userId,
             'title' => 'Article Title',
             'body'  => 'Article Body Article Body Article Body '
         ];
 
-        $this->post('/api/articles/store', $attributes)->assertResponseStatus(201);
+        $this->actingAs($user)->post('/api/articles/store', $attributes)->assertResponseStatus(201);
     }
 
 }

@@ -17,26 +17,8 @@ class UpdateArticleTest extends \TestCase
         $this->runDatabaseMigrations();
     }
 
-    public function testIfBodyNotString()
-    {
-        $user = factory(User::class)->create();
 
-        $article = Article::create([
-           'user_id' => $user->id,
-           'title' => 'Article title',
-           'body' => 'Article body'
-        ]);
-
-        $attributes = [
-            'user_id' => $user->id,
-            'title' => 'new title',
-            'body' => 234
-        ];
-
-        $this->patch('/api/articles/' . $article->id . '/update', $attributes)->assertResponseStatus(422);
-    }
-
-    public function testIfTitleNotString()
+    public function testIfRequestIsWithoutTitle()
     {
         $user = factory(User::class)->create();
         $article = Article::create([
@@ -46,15 +28,13 @@ class UpdateArticleTest extends \TestCase
         ]);
 
         $attributes = [
-            'user_id' => $user->id,
-            'title' => 4356,
-            'body' => 'new body'
+            'body' => 'Article body'
         ];
 
-        $this->patch('/api/articles/' . $article->id . '/update', $attributes)->assertResponseStatus(422);
+        $this->actingAs($user)->patch('/api/articles/' . $article->id . '/update', $attributes)->assertResponseStatus(422);
     }
 
-    public function testIfRequestIsEmpty()
+    public function testIfRequestIsWithoutBody()
     {
         $user = factory(User::class)->create();
         $article = Article::create([
@@ -63,28 +43,23 @@ class UpdateArticleTest extends \TestCase
             'body' => 'Article body'
         ]);
 
-        $attributes = [];
+        $attributes = [
+            'title' => 'Article title',
+        ];
 
-        $this->patch('/api/articles/' . $article->id . '/update', $attributes)->assertResponseStatus(422);
+        $this->actingAs($user)->patch('/api/articles/' . $article->id . '/update', $attributes)->assertResponseStatus(422);
     }
 
     public function testUpdatingNotExistArticle()
     {
         $user = factory(User::class)->create();
-        $article = Article::create([
-            'user_id' => $user->id,
-            'title' => 'Article title',
-            'body' => 'Article body'
-        ]);
-        $article->delete();
 
         $attributes = [
-            'user_id' => $user->id,
             'title' => 'new title',
             'body' => 'new body'
         ];
 
-        $this->patch('/api/articles/' . $article->id . '/update', $attributes)->assertResponseStatus(404);
+        $this->actingAs($user)->patch('/api/articles/5/update', $attributes)->assertResponseStatus(401);
 
     }
 
@@ -99,12 +74,11 @@ class UpdateArticleTest extends \TestCase
         ]);
 
         $attributes = [
-            'user_id' => $user->id,
             'title' => 'new title',
             'body' => 'new body'
         ];
 
-        $this->patch('/api/articles/' . $article->id . '/update', $attributes)->assertResponseStatus(201);
+        $this->actingAs($user)->patch('/api/articles/' . $article->id . '/update', $attributes)->assertResponseStatus(201);
     }
 
 }

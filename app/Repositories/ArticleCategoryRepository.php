@@ -35,8 +35,19 @@ class ArticleCategoryRepository implements ArticleCategoryRepositoryInterface
         return $category;
     }
 
+    private function find($articleId, $categoryId)
+    {
+        return ArticleCategory::where('article_id', '=', $articleId)
+            ->where('category_id', '=', $categoryId)->first();
+    }
+
     public function storeArticleCategory($articleId, $categoryId)
     {
+        $test = $this->find($articleId, $categoryId);
+
+        if ($test)
+            return null;
+
         $articleCategory = ArticleCategory::create([
            'article_id' => $articleId,
            'category_id' => $categoryId
